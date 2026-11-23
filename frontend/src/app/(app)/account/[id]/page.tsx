@@ -1,6 +1,7 @@
 import { getAccount, isNotFound } from "@/lib/horizon";
 import { getIndexedContractsByCreator } from "@/lib/indexed-db";
 import CopyButton from "@/components/CopyButton";
+import DetailRow from "@/components/DetailRow";
 import { balanceLabel, formatNumber, shortHash } from "@/lib/format";
 import { splitMuxedAddress } from "@/lib/muxed";
 import { isAccountId } from "@/lib/strkey-validation";
@@ -41,24 +42,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-interface DetailRowProps {
-  label: string;
-  value: string | React.ReactNode;
-  mono?: boolean;
-}
-
-function DetailRow({ label, value, mono }: DetailRowProps) {
-  return (
-    <div className="flex justify-between items-start">
-      <span className="text-prism-muted text-sm">{label}</span>
-      <span
-        className={`text-sm font-semibold ${mono ? "font-mono text-xs" : ""}`}
-      >
-        {value}
-      </span>
-    </div>
-  );
-}
 
 export default async function AccountPage({ params, searchParams }: Props) {
   // A muxed address shows the base account, with its ID carried in the query.
@@ -123,14 +106,8 @@ export default async function AccountPage({ params, searchParams }: Props) {
         {account.sponsor && (
           <DetailRow
             label="Sponsor"
-            value={
-              <Link
-                href={`/account/${account.sponsor}`}
-                className="text-prism-accent hover:underline break-all"
-              >
-                {account.sponsor}
-              </Link>
-            }
+            value={account.sponsor}
+            link={`/account/${account.sponsor}`}
           />
         )}
         {account.numSponsoring !== undefined && (
